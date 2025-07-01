@@ -1,0 +1,145 @@
+// ========== examples/lexer_valid_1.lang ==========
+// Exemplo de tokens válidos - deve retornar TRUE
+
+main () : Int {
+    x = 42;
+    y = 3.14;
+    c = 'a';
+    b = true;
+    return x;
+}
+
+// ========== examples/lexer_valid_2.lang ==========
+// Exemplo com mais tokens - deve retornar TRUE
+
+data Point {
+    x :: Int;
+    y :: Int;
+}
+
+abstract data Stack {
+    items :: Int[];
+    top :: Int;
+    
+    push(s :: Stack, value :: Int) : Stack {
+        return s;
+    }
+}
+
+main() {
+    p = new Point;
+    p.x = 10;
+    p.y = 20;
+    
+    if (p.x < p.y) {
+        print p.x;
+    } else {
+        print p.y;
+    }
+    
+    iterate (i : 5) {
+        read x;
+        print x;
+    }
+}
+
+// ========== examples/lexer_valid_3.lang ==========
+// Exemplo com operadores e comentários - deve retornar TRUE
+
+-- Comentário de linha
+main() : Int {
+    {- Comentário
+       de bloco -}
+    
+    x = 10 + 20 * 30;
+    y = x / 2 % 3;
+    z = x && y;
+    
+    if (x < y && y == z || x != y) {
+        return !false;
+    }
+    
+    return 0;
+}
+
+// ========== examples/lexer_valid_4.lang ==========
+// Exemplo com caracteres especiais - deve retornar TRUE
+
+main() {
+    c1 = 'A';           -- Caractere normal
+    c2 = '\n';          -- Escape sequence
+    c3 = '\t';          -- Tab
+    c4 = '\\';          -- Backslash
+    c5 = '\'';          -- Aspas simples
+    c6 = '\065';        -- Código ASCII
+    
+    f1 = 3.14;          -- Float normal
+    f2 = .5;            -- Float começando com ponto
+    f3 = 123.0;         -- Float terminando com zero
+}
+
+// ========== examples/lexer_invalid_1.lang ==========
+// Exemplo com erro léxico - deve retornar FALSE
+
+main() {
+    x = 42;
+    y = @invalid_char;  -- '@' não é token válido
+    return x;
+}
+
+// ========== examples/lexer_invalid_2.lang ==========
+// Exemplo com caractere mal formado - deve retornar FALSE
+
+main() {
+    c = 'ab';           -- Erro: char só pode ter 1 caractere
+    return 0;
+}
+
+// ========== examples/lexer_invalid_3.lang ==========
+// Exemplo com float mal formado - deve retornar FALSE
+
+main() {
+    f = 3.14.5;         -- Erro: dois pontos no float
+    return 0;
+}
+
+// ========== examples/lexer_invalid_4.lang ==========
+// Exemplo com comentário mal formado - deve retornar FALSE
+
+main() {
+    {- Comentário sem fechamento
+    return 0;
+}
+
+// ========== examples/lexer_mixed.lang ==========
+// Exemplo misto com vários tokens - deve retornar TRUE
+
+abstract data Racional {
+    numerador :: Int;
+    denominador :: Int;
+    
+    add(r1 :: Racional, r2 :: Racional) : Racional {
+        r = new Racional;
+        r.denominador = r1.denominador * r2.denominador;
+        r.numerador = r1.numerador * r2.denominador + r2.numerador * r1.denominador;
+        return r;
+    }
+}
+
+main() {
+    r1 = new Racional;
+    r1.numerador = 3;
+    r1.denominador = 4;
+    
+    r2 = new Racional;
+    r2.numerador = 1;
+    r2.denominador = 2;
+    
+    resultado = add(r1, r2);
+    
+    iterate (i : 10) {
+        if (i % 2 == 0) {
+            print i;
+        }
+    }
+}
